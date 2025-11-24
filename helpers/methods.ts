@@ -59,7 +59,6 @@ export const sarrusMethod = (mat: number[][]) => {
   steps.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   steps.push("");
 
-  // Display matrix
   steps.push("Matriz original:");
   mat.forEach((row, i) => {
     steps.push(
@@ -68,7 +67,6 @@ export const sarrusMethod = (mat: number[][]) => {
   });
   steps.push("");
 
-  // Extend matrix
   steps.push("Extensão da matriz (adicionar primeiras 2 colunas):");
   const extended = mat.map((row, i) => [...row, mat[i][0], mat[i][1]]);
   extended.forEach((row) => {
@@ -78,7 +76,6 @@ export const sarrusMethod = (mat: number[][]) => {
   });
   steps.push("");
 
-  // Main diagonal
   steps.push("➡️  DIAGONAIS PRINCIPAIS (esquerda → direita):");
   const d1 = mat[0][0] * mat[1][1] * mat[2][2];
   const d2 = mat[0][1] * mat[1][2] * mat[2][0];

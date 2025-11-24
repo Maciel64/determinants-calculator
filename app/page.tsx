@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Calculator, Plus, Minus, Shuffle } from "lucide-react";
 import MatrixInput from "@/components/matrix-input";
 import ResultDisplay from "@/components/result-display";
-import { calculateDeterminant } from "@/helpers/methots";
+import { calculateDeterminant } from "@/helpers/methods";
 
 export default function DeterminantCalculator() {
   const [matrixSize, setMatrixSize] = useState(3);
