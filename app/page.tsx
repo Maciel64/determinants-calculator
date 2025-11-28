@@ -62,7 +62,7 @@ export default function DeterminantCalculator() {
             </h1>
           </div>
           <p className="text-lg text-muted-foreground">
-            Calcule determinantes usando os métodos de Sarrus, Laplace e Chiò
+            Calcule determinantes usando os métodos de Sarrus e Laplace
           </p>
         </div>
 
