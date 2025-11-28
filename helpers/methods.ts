@@ -128,9 +128,8 @@ export const laplaceMethod = (mat: number[][]) => {
       const det = m[0][0] * m[1][1] - m[0][1] * m[1][0];
       if (depth > 0) {
         steps.push(
-          `${indent}|${m[0][0]} ${m[0][1]}| = ${m[0][0]}×${m[1][1]} - ${m[0][1]}×${m[1][0]} = ${det}`
+          `${indent}Determinante 2×2: ${m[0][0]}×${m[1][1]} - ${m[0][1]}×${m[1][0]} = ${det}`
         );
-        steps.push(`${indent}|${m[1][0]} ${m[1][1]}|`);
       }
       return det;
     }
@@ -148,23 +147,62 @@ export const laplaceMethod = (mat: number[][]) => {
     }
 
     let det = 0;
+
+    // Somente para depth 0: colecionar contribuições para exibir a soma ao final
+    const contributions: number[] = [];
+    const contributionLabels: string[] = [];
+
     for (let j = 0; j < n; j++) {
       const minor = m
         .slice(1)
         .map((row) => row.filter((_, colIdx) => colIdx !== j));
 
-      const cofactor = Math.pow(-1, j) * m[0][j];
-      const minorDet = calculateDet(minor, depth + 1);
+      const cofactorSign = Math.pow(-1, j);
+      const cofactor = cofactorSign * m[0][j];
 
       if (depth === 0) {
-        const sign = j % 2 === 0 ? "+" : "-";
-        steps.push(`${indent}${sign} ${m[0][j]} × M${0}${j}`);
+        steps.push(`${indent}Elemento a₀${j} = ${m[0][j]}`);
+        steps.push(`${indent}Sinal: (-1)^{0+${j}} = ${cofactorSign}`);
+        steps.push(
+          `${indent}Cofator C₀${j} = ${cofactorSign} × ${m[0][j]} = ${cofactor}`
+        );
+        steps.push(`${indent}Menor M₀${j}:`);
+        minor.forEach((row) => {
+          steps.push(`${indent}  [ ${row.join("  ")} ]`);
+        });
+        steps.push("");
       }
 
-      det += cofactor * minorDet;
+      const minorDet = calculateDet(minor, depth + 1);
+
+      const contribution = cofactor * minorDet;
+
+      if (depth === 0) {
+        // armazenar para a soma final
+        contributions.push(contribution);
+        contributionLabels.push(`det${j + 1}`);
+
+        steps.push(
+          `${indent}Contribuição: C₀${j} × det(M₀${j}) = ${cofactor} × ${minorDet} = ${contribution}`
+        );
+        steps.push("");
+      }
+
+      det += contribution;
     }
 
     if (depth === 0) {
+      // Linha simbólica: det1 + det2 + det3 = ...
+      const symbolicSum = contributionLabels.join(" + ");
+      // Linha com valores: det1(=x) + det2(=y) + ... = total
+      const numericParts = contributions.map(
+        (c, i) => `${contributionLabels[i]} = (${c})`
+      );
+      const numericSum = numericParts.join(" + ");
+
+      steps.push("Soma das contribuições:");
+      steps.push(`${symbolicSum} = ${det}`);
+      steps.push(`${numericSum} = ${det}`);
       steps.push("");
       steps.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
       steps.push(`✅ DETERMINANTE = ${det}`);
